@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>File Tools - Size Reducer & Converter</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-file-alt"></i> File Tools</h1>
+            <p class="subtitle">Reduce file sizes or convert between formats</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('reducer')">Size Reducer</button>
+            <button class="tab-btn" onclick="openTab('converter')">File Converter</button>
+        </div>
+        
+        <!-- File Size Reducer Tab -->
+        <div id="reducer" class="tab-content" style="display: block;">
+            <form method="post" enctype="multipart/form-data" action="/upload">
+                <div class="file-upload">
+                    <label for="file-reducer" class="upload-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span id="file-name-reducer">Choose a file to compress</span>
+                    </label>
+                    <input type="file" name="file" id="file-reducer" required onchange="updateFileName('reducer')">
+                </div>
+                <button type="submit" class="action-btn">
+                    <i class="fas fa-compress-alt"></i> Compress File
+                </button>
+                <p class="note">Supported: PNG, JPG, JPEG, BMP, PDF, DOCX, XLSX</p>
+            </form>
+        </div>
+        
+        <!-- File Converter Tab -->
+        <div id="converter" class="tab-content">
+            <form method="post" enctype="multipart/form-data" action="/convert">
+                <div class="file-upload">
+                    <label for="file-converter" class="upload-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span id="file-name-converter">Choose a file to convert</span>
+                    </label>
+                    <input type="file" name="file" id="file-converter" required onchange="updateFileName('converter')">
+                </div>
+                
+                <div class="conversion-options">
+                <label>Convert to:</label>
+                <select name="target_format" required>
+                    <option value="" disabled selected>Select conversion</option>
+                    <option value="pdf_to_docx">PDF to Word (DOCX)</option>
+                    <option value="docx_to_pdf">Word (DOCX) to PDF</option>
+                    <option value="pdf_to_xlsx">PDF to Excel (XLSX)</option>
+                    <option value="xlsx_to_pdf">Excel (XLSX) to PDF</option>
+                    <option value="img_to_pdf">Image to PDF</option>
+                    <option value="pdf_to_img">PDF to Image</option>
+                    <option value="jpg_to_png">JPG to PNG</option>
+                    <option value="png_to_jpg">PNG to JPG</option>
+                </select>
+            </div>
+                
+                <button type="submit" class="action-btn">
+                    <i class="fas fa-exchange-alt"></i> Convert File
+                </button>
+                <p class="note">Supported conversions: PDF ↔ Word, PDF ↔ Excel, Images ↔ PDF/Word</p>
+            </form>
+        </div>
+        
+        <!-- Error/Success Messages -->
+        <div id="message-container">
+            {% if message %}
+            <div class="message {{ message.type }}">
+                <i class="fas {% if message.type == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %}"></i>
+                {{ message.text }}
+                {% if message.type == 'error' %}
+                <p class="contact-dev">Contact Developer Andee for assistance</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+            }
+            
+            const tabButtons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).style.display = "block";
+            event.currentTarget.classList.add("active");
+        }
+        
+        function updateFileName(tabType) {
+            const input = document.getElementById(`file-${tabType}`);
+            const fileNameDisplay = document.getElementById(`file-name-${tabType}`);
+            
+            if (input.files.length > 0) {
+                fileNameDisplay.textContent = input.files[0].name;
+            } else {
+                fileNameDisplay.textContent = `Choose a file to ${tabType === 'reducer' ? 'compress' : 'convert'}`;
+            }
+        }
+    </script>
+</body>
+</html>
