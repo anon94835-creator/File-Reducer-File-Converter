@@ -1,10 +1,10 @@
-Flask==2.3.3
-Pillow==10.3.0  # Works with Python 3.9
-pikepdf==8.15.0
-PyMuPDF==1.23.28
-python-docx==1.1.0
-openpyxl==3.1.2
-pandas==2.2.2
-pdfplumber==0.11.0
-reportlab==4.1.0
-gunicorn==21.2.0  # Required for production
+Flask
+Pillow
+pikepdf
+PyMuPDF
+python-docx
+openpyxl
+pandas
+pdfplumber
+reportlab
+gunicorn
